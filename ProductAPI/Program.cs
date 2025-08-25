@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using ProductAPI.Config;
 using ProductAPI.DBContext;
 using ProductAPI.Repositories;
 
@@ -13,7 +12,11 @@ builder.Services.AddDbContext<MySQLContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 4, 6)))
 );
 
-IMapper mapper = MapperConfig.RegisterMaps().CreateMapper();
+IMapper mapper = new MapperConfiguration(cfg =>
+{
+    cfg.CreateMap<Product, ProductDTO>();
+    cfg.CreateMap<ProductDTO, Product>();
+}).CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(config => AppDomain.CurrentDomain.GetAssemblies());
 
