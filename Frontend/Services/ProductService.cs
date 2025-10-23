@@ -28,6 +28,7 @@ public class ProductService(HttpClient client) : IProductService
         else
             throw new Exception("Something went wrong when calling API");
     }
+
     public async Task<ProductViewModel> UpdateProduct(ProductViewModel model)
     {
         var response = await client.PutAsJson(BasePath, model);

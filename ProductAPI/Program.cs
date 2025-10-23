@@ -2,6 +2,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ProductAPI.DBContext;
+using ProductAPI.DTO;
+using ProductAPI.Models;
 using ProductAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,17 +38,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
+    app.UseSwaggerUI(options =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductAPI V1");
-        c.RoutePrefix = string.Empty;
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductAPI V1");
+        options.RoutePrefix = string.Empty;
     });
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
-// app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 

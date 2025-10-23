@@ -12,7 +12,6 @@ builder.Services.AddHttpClient<ICouponService, CouponService>(
     c => c.BaseAddress = new Uri(builder.Configuration["ServiceURLs:CouponAPI"])
 );
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -27,8 +26,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
-app.UseAuthorization();
 
 app.MapStaticAssets();
 
