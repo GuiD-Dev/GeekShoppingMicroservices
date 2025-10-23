@@ -27,7 +27,7 @@ services:
   product-api:
     image: product-api:latest
     ports:
-      - "4000:4000"
+      - "4002:4002"
     container_name: product-api
     depends_on:
       - database
@@ -38,7 +38,7 @@ services:
   cart-api:
     image: cart-api:latest
     ports:
-      - "4002:4002"
+      - "4004:4004"
     container_name: cart-api
     depends_on:
       - database
@@ -50,7 +50,7 @@ services:
   coupon-api:
     image: coupon-api:latest
     ports:
-      - "4004:4004"
+      - "4006:4006"
     container_name: coupon-api
     depends_on:
       - database
@@ -60,14 +60,22 @@ services:
 
   order-api:
     image: order-api:latest
-    ports:
-      - "4006:4006"
     container_name: order-api
     depends_on:
       - database
       - rabbitmq
     networks:
       - network_database
+      - network_microservices
+
+  api-gateway:
+    image: api-gateway:latest
+    ports:
+      - "4000:4000"
+    container_name: api-gateway
+    depends_on:
+      - product-api
+    networks:
       - network_microservices
 
   frontend:

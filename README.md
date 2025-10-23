@@ -12,6 +12,7 @@ docker build -f docker/product-api.dockerfile -t product-api .
 docker build -f docker/cart-api.dockerfile -t cart-api .
 docker build -f docker/coupon-api.dockerfile -t coupon-api .
 docker build -f docker/order-api.dockerfile -t order-api .
+docker build -f docker/api-gateway.dockerfile -t api-gateway .
 docker build -f docker/frontend.dockerfile -t frontend .
 
 # Run docker compose
