@@ -2,6 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug APIGateway",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/APIGateway/APIGateway.csproj"
+        },
+        {
             "name": "Debug ProductAPI",
             "type": "dotnet",
             "request": "launch",
@@ -42,9 +48,8 @@
         {
             "name": "Debug All",
             "configurations": [
+                "Debug APIGateway",
                 "Debug ProductAPI",
-                "Debug CartAPI",
-                "Debug CouponAPI",
                 "Debug Frontend",
             ],
             "stopAll": true
