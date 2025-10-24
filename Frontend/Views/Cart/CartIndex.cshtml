@@ -4,8 +4,8 @@
 {
     <form method="post">
         <br />
-        <input asp-for="UserId" hidden />
-        <input asp-for="Id" hidden />
+        <input asp-for="Header.UserId" hidden />
+        <input asp-for="Header.Id" hidden />
         <div>
             <div class="card border mt-4 container">
                 <div class="card-header bg-dark text-light ml-0 row">
@@ -73,14 +73,14 @@
                     <div class="row">
                         <div class="col-6">
                             <span>Coupon:</span>
-                            <input asp-for="CouponCode" />
+                            <input asp-for="Header.CouponCode" />
                             <button type="submit" asp-action="ApplyCoupon" class="btn-success">
                                 Apply
                             </button>
                         </div>
                         <div class="col-6 text-end">
                             <span class="text-danger" style="font-size:21px;">
-                                Purchase Amount: @string.Format("{0:c}", Model.PurchaseAmount)
+                                Purchase Amount: @string.Format("{0:c}", Model.Header.PurchaseAmount)
                                 <br />
                             </span>
                         </div>

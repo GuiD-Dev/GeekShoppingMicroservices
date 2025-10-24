@@ -16,15 +16,17 @@ public class HomeController(IProductService productService, ICartService cartSer
     {
         CartViewModel cart = new()
         {
-            // TODO: adjust when Identity Server will be implemented 
-            UserId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value ?? "1"
+            Header = new()
+            {
+                // TODO: adjust when Identity Server will be implemented 
+                UserId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value ?? "1"
+            },
+            Details = [new()
+            {
+                Count = model.Count,
+                Product = await productService.FindProductById(model.Id)
+            }]
         };
-
-        cart.Details = [new()
-        {
-            Count = model.Count,
-            Product = await productService.FindProductById(model.Id)
-        }];
 
         var response = await cartService.AddItemToCart(cart);
         if (response != null)

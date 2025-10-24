@@ -3,11 +3,11 @@
 @if (Model != null && Model.Details.Count() > 0)
 {
     <form method="post">
-        <input asp-for="UserId" hidden />
-        <input asp-for="Id" hidden />
-        <input asp-for="CouponCode" hidden />
-        <input asp-for="DiscountAmount" hidden />
-        <input asp-for="PurchaseAmount" hidden />
+        <input asp-for="Header.UserId" hidden />
+        <input asp-for="Header.Id" hidden />
+        <input asp-for="Header.CouponCode" hidden />
+        <input asp-for="Header.DiscountAmount" hidden />
+        <input asp-for="Header.PurchaseAmount" hidden />
         <div>
             <span style="font-size:25px;" class="text-warning">Enter details and place order:</span>
             <br />
@@ -18,31 +18,31 @@
                     <div class="row">
                         <div class="col-12">
                             <label class="col-form-label">First Name:</label>
-                            <input asp-for="FirstName" class="form-control" />
+                            <input asp-for="Header.FirstName" class="form-control" />
                         </div>
                         <div class="col-12">
                             <label class="col-form-label">Last Name:</label>
-                            <input asp-for="LastName" class="form-control" />
+                            <input asp-for="Header.LastName" class="form-control" />
                         </div>
                         <div class="col-12">
                             <label class="col-form-label">E-mail:</label>
-                            <input asp-for="Email" class="form-control" />
+                            <input asp-for="Header.Email" class="form-control" />
                         </div>
                         <div class="col-12">
                             <label class="col-form-label">Phone Number:</label>
-                            <input asp-for="Phone" class="form-control" />
+                            <input asp-for="Header.Phone" class="form-control" />
                         </div>
                         <div class="col-12">
                             <label class="col-form-label">Card Number:</label>
-                            <input asp-for="CardNumber" class="form-control" />
+                            <input asp-for="Header.CardNumber" class="form-control" />
                         </div>
                         <div class="col-12">
                             <label class="col-form-label">CVV:</label>
-                            <input asp-for="CVV" class="form-control" />
+                            <input asp-for="Header.CVV" class="form-control" />
                         </div>
                         <div class="col-12 pb-4">
                             <label class="col-form-label">Expiry:</label>
-                            <input asp-for="ExpiryMothYear" placeholder="MMYY" class="form-control" />
+                            <input asp-for="Header.ExpiryMothYear" placeholder="MMYY" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -84,11 +84,11 @@
                             }
                             <div class="row">
                                 <div class="col-12 text-right pr-4 text-danger">
-                                    Purchase Amount: @string.Format("{0:c}", Model.PurchaseAmount)<br />
-                                    @if (Model.DiscountAmount > 0)
+                                    Purchase Amount: @string.Format("{0:c}", Model.Header.PurchaseAmount)<br />
+                                    @if (Model.Header.DiscountAmount > 0)
                                     {
                                         <span class="text-success">
-                                            Discount Amount: @string.Format("{0:c}", Model.DiscountAmount)
+                                            Discount Amount: @string.Format("{0:c}", Model.Header.DiscountAmount)
                                         </span>
                                     }
                                 </div>
