@@ -19,6 +19,7 @@ IMapper mapper = new MapperConfiguration(config =>
 {
     config.CreateMap<ProductDTO, Product>().ReverseMap();
     config.CreateMap<CartDTO, Cart>().ReverseMap();
+    config.CreateMap<CartHeaderDTO, CartHeader>().ReverseMap();
     config.CreateMap<CartDetailDTO, CartDetail>().ReverseMap();
 }).CreateMapper();
 builder.Services.AddSingleton(mapper);

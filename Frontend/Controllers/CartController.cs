@@ -18,18 +18,19 @@ public class CartController(ICartService cartService, ICouponService couponServi
 
         if (cart != null)
         {
-            if (!string.IsNullOrEmpty(cart.CouponCode))
+            if (!string.IsNullOrEmpty(cart.Header?.CouponCode))
             {
-                var coupon = await couponService.GetCoupon(cart.CouponCode);
+                var coupon = await couponService.GetCoupon(cart.Header.CouponCode);
                 if (coupon?.CouponCode != null)
                 {
-                    cart.DiscountAmount = coupon.DiscountAmount;
+                    cart.Header.DiscountAmount = coupon.DiscountAmount;
                 }
             }
-            foreach (var detail in cart.Details)
-                cart.PurchaseAmount += detail.Product.Price * detail.Count;
 
-            cart.PurchaseAmount -= cart.DiscountAmount;
+            foreach (var detail in cart.Details)
+                cart.Header.PurchaseAmount += detail.Product.Price * detail.Count;
+
+            cart.Header.PurchaseAmount -= cart.Header.DiscountAmount;
         }
 
         return cart;

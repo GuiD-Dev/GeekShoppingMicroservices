@@ -10,26 +10,42 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
 {
     public CartDTO FindCartByUserId(string userId)
     {
-        var cart = context.Carts.Include(c => c.Details).ThenInclude(d => d.Product)
-                            .FirstOrDefault(c => c.UserId == userId);
+        Cart cart = new() { Header = context.CartHeaders.FirstOrDefault(c => c.UserId == userId) };
+        cart.Details = cart.Header != null
+            ? context.CartDetails.Where(c => c.CartHeader.Id == cart.Header.Id).Include(d => d.Product).ToList()
+            : new List<CartDetail>();
         return mapper.Map<CartDTO>(cart);
     }
 
     public CartDTO SaveOrUpdateCart(CartDTO cartDto)
     {
-        var cart = context.Carts.Include(c => c.Details).ThenInclude(d => d.Product)
-                        .FirstOrDefault(c => c.UserId == cartDto.UserId);
-
-        if (cart == null)
+        var details = new List<CartDetail>();
+        var header = context.CartHeaders.FirstOrDefault(c => c.UserId == cartDto.Header.UserId);
+        if (header == null)
         {
-            cart = mapper.Map<Cart>(cartDto);
-            context.Carts.Add(cart);
+            header = new CartHeader
+            {
+                UserId = cartDto.Header.UserId,
+                CouponCode = cartDto.Header.CouponCode
+            };
+            context.CartHeaders.Add(header);
+
+            foreach (var detailDto in cartDto.Details)
+            {
+                var detail = mapper.Map<CartDetail>(detailDto);
+                detail.CartHeader = header;
+                context.CartDetails.Add(detail);
+                details.Add(detail);
+            }
         }
         else
         {
+            header.CouponCode = cartDto.Header.CouponCode;
+            context.CartHeaders.Update(header);
+
             foreach (var detailDto in cartDto.Details)
             {
-                var detail = context.CartDetails.FirstOrDefault(d => d.Cart.Id == cart.Id && d.Product.Id == detailDto.Product.Id);
+                var detail = context.CartDetails.FirstOrDefault(d => d.CartHeader.Id == header.Id && d.Product.Id == detailDto.Product.Id);
                 if (detail == null)
                 {
                     detail = mapper.Map<CartDetail>(detailDto);
@@ -40,12 +56,13 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
                     detail.Count = detailDto.Count;
                     context.CartDetails.Update(detail);
                 }
+                details.Add(detail);
             }
         }
 
         context.SaveChanges();
 
-        return mapper.Map<CartDTO>(cart);
+        return mapper.Map<CartDTO>(new Cart { Header = header, Details = details });
     }
 
     public bool RemoveFromCart(long cartDetailId)
@@ -55,12 +72,12 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
             var detail = context.CartDetails.FirstOrDefault(c => c.Id == cartDetailId);
             if (detail == null) return false;
 
-            var detailsCount = detail.Cart.Details.Count();
-
             context.CartDetails.Remove(detail);
 
+            var detailsCount = context.CartDetails.Count(c => c.CartHeader.Id == detail.CartHeader.Id);
+
             if (detailsCount == 1)
-                context.Carts.Remove(detail.Cart);
+                context.CartHeaders.Remove(detail.CartHeader);
 
             context.SaveChanges();
 
@@ -76,12 +93,12 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
     {
         try
         {
-            var cart = context.Carts.FirstOrDefault(c => c.UserId == userId);
+            var cart = context.CartHeaders.FirstOrDefault(c => c.UserId == userId);
             if (cart == null) return false;
 
-            var details = context.CartDetails.Where(c => c.Cart.Id == cart.Id).ToList();
+            var details = context.CartDetails.Where(c => c.CartHeader.Id == cart.Id).ToList();
             context.CartDetails.RemoveRange(details);
-            context.Carts.Remove(cart);
+            context.CartHeaders.Remove(cart);
             context.SaveChanges();
 
             return true;

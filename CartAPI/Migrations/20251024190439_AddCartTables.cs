@@ -15,7 +15,7 @@ namespace CartAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "cart",
+                name: "cart_header",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
@@ -27,7 +27,7 @@ namespace CartAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_cart", x => x.id);
+                    table.PrimaryKey("PK_cart_header", x => x.id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -58,7 +58,7 @@ namespace CartAPI.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    cart_id = table.Column<long>(type: "bigint", nullable: true),
+                    cart_header_id = table.Column<long>(type: "bigint", nullable: true),
                     product_id = table.Column<long>(type: "bigint", nullable: true),
                     count = table.Column<int>(type: "int", nullable: false)
                 },
@@ -66,9 +66,9 @@ namespace CartAPI.Migrations
                 {
                     table.PrimaryKey("PK_cart_detail", x => x.id);
                     table.ForeignKey(
-                        name: "FK_cart_detail_cart_cart_id",
-                        column: x => x.cart_id,
-                        principalTable: "cart",
+                        name: "FK_cart_detail_cart_header_cart_header_id",
+                        column: x => x.cart_header_id,
+                        principalTable: "cart_header",
                         principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_cart_detail_product_product_id",
@@ -79,9 +79,9 @@ namespace CartAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_cart_detail_cart_id",
+                name: "IX_cart_detail_cart_header_id",
                 table: "cart_detail",
-                column: "cart_id");
+                column: "cart_header_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cart_detail_product_id",
@@ -96,7 +96,7 @@ namespace CartAPI.Migrations
                 name: "cart_detail");
 
             migrationBuilder.DropTable(
-                name: "cart");
+                name: "cart_header");
 
             migrationBuilder.DropTable(
                 name: "product");
