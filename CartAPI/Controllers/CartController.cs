@@ -43,10 +43,10 @@ public class CartController(ICartRepository cartRepository, ICheckoutPublisher c
         var cart = cartRepository.FindCartByUserId(checkout.UserId);
         if (cart == null) return NotFound();
 
-        checkout.Details = cart.Details;
-        checkout.DateTime = DateTime.Now;
+        // checkout.Details = cart.Details;
+        // checkout.DateTime = DateTime.Now;
 
-        checkoutPublisher.PublishMessage(checkout, "checkout_queue");
+        // checkoutPublisher.PublishMessage(checkout, "checkout_queue");
 
         return Ok(checkout);
     }
