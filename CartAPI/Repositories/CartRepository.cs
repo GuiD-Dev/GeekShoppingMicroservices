@@ -49,6 +49,7 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
                 if (detail == null)
                 {
                     detail = mapper.Map<CartDetail>(detailDto);
+                    detail.CartHeader = header;
                     context.CartDetails.Add(detail);
                 }
                 else
