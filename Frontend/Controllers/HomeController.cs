@@ -8,6 +8,9 @@ namespace Frontend.Controllers;
 public class HomeController(IProductService productService, ICartService cartService) : Controller
 {
     public async Task<IActionResult> Index() => View(await productService.FindAllProducts());
+
+    public IActionResult Logout() => SignOut("Cookies", "access_token");
+
     public async Task<IActionResult> ProductDetails(long id) => View(await productService.FindProductById(id));
 
     [HttpPost]
@@ -36,6 +39,8 @@ public class HomeController(IProductService productService, ICartService cartSer
     }
 
     public IActionResult Privacy() => View();
+
+    public IActionResult Login() => View();
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
