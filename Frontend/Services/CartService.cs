@@ -31,11 +31,11 @@ public class CartService(HttpClient client) : ICartService
             throw new Exception("Something went wrong when calling API");
     }
 
-    public async Task<bool> RemoveFromCart(long cartId)
+    public async Task<bool> RemoveFromCart(long detailId)
     {
-        var response = await client.DeleteAsync($"{BasePath}/{cartId}");
+        var response = await client.DeleteAsync($"{BasePath}/{detailId}");
         if (response.IsSuccessStatusCode)
-            return await response.ReadContentAs<bool>();
+            return true;
         else
             throw new Exception("Something went wrong when calling API");
     }
