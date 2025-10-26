@@ -5,7 +5,7 @@ using Frontend.Services;
 
 namespace Frontend.Controllers;
 
-public class CartController(ICartService cartService, ICouponService couponService) : Controller
+public class CartController(ICartService cartService, IProductService productService, ICouponService couponService) : Controller
 {
     public async Task<IActionResult> CartIndex() => View(await FindUserCart());
 
@@ -16,7 +16,7 @@ public class CartController(ICartService cartService, ICouponService couponServi
 
         var cart = await cartService.FindCartByUserId(userId);
 
-        if (cart != null)
+        if (cart?.Header != null)
         {
             if (!string.IsNullOrEmpty(cart.Header?.CouponCode))
             {
@@ -28,7 +28,10 @@ public class CartController(ICartService cartService, ICouponService couponServi
             }
 
             foreach (var detail in cart.Details)
+            {
+                detail.Product = await productService.FindProductById(detail.ProductId);
                 cart.Header.PurchaseAmount += detail.Product.Price * detail.Count;
+            }
 
             cart.Header.PurchaseAmount -= cart.Header.DiscountAmount;
         }

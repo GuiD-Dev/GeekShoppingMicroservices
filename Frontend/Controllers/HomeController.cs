@@ -24,7 +24,7 @@ public class HomeController(IProductService productService, ICartService cartSer
             Details = [new()
             {
                 Count = model.Count,
-                Product = await productService.FindProductById(model.Id)
+                ProductId = model.Id
             }]
         };
 
