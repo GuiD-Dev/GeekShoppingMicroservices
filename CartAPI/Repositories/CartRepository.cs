@@ -66,16 +66,17 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
         return mapper.Map<CartDTO>(new Cart { Header = header, Details = details });
     }
 
-    public bool RemoveFromCart(long cartDetailId)
+    public bool RemoveFromCart(long detailId)
     {
         try
         {
-            var detail = context.CartDetails.FirstOrDefault(c => c.Id == cartDetailId);
+            var detail = context.CartDetails.Include(d => d.CartHeader)
+                                            .FirstOrDefault(d => d.Id == detailId);
             if (detail == null) return false;
 
             context.CartDetails.Remove(detail);
 
-            var detailsCount = context.CartDetails.Count(c => c.CartHeader.Id == detail.CartHeader.Id);
+            var detailsCount = context.CartDetails.Count(d => d.CartHeader.Id == detail.CartHeader.Id);
 
             if (detailsCount == 1)
                 context.CartHeaders.Remove(detail.CartHeader);

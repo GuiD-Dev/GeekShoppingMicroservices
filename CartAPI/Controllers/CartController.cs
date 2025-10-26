@@ -31,10 +31,10 @@ public class CartController(ICartRepository cartRepository) : ControllerBase
         return cart != null ? Ok(cart) : NotFound();
     }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<CartDTO>> RemoveCart(int cartDetailId)
+    [HttpDelete("{detailId}")]
+    public async Task<ActionResult> RemoveCart(int detailId)
     {
-        var result = cartRepository.RemoveFromCart(cartDetailId);
+        var result = cartRepository.RemoveFromCart(detailId);
         return result ? Ok() : BadRequest();
     }
 
