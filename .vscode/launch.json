@@ -50,6 +50,8 @@
             "configurations": [
                 "Debug APIGateway",
                 "Debug ProductAPI",
+                "Debug CartAPI",
+                "Debug CouponAPI",
                 "Debug Frontend",
             ],
             "stopAll": true
