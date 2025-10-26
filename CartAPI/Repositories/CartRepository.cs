@@ -12,7 +12,7 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
     {
         Cart cart = new() { Header = context.CartHeaders.FirstOrDefault(c => c.UserId == userId) };
         cart.Details = cart.Header != null
-            ? context.CartDetails.Where(c => c.CartHeader.Id == cart.Header.Id).Include(d => d.Product).ToList()
+            ? context.CartDetails.Where(c => c.CartHeader.Id == cart.Header.Id).ToList()
             : new List<CartDetail>();
         return mapper.Map<CartDTO>(cart);
     }
@@ -45,7 +45,7 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
 
             foreach (var detailDto in cartDto.Details)
             {
-                var detail = context.CartDetails.FirstOrDefault(d => d.CartHeader.Id == header.Id && d.Product.Id == detailDto.Product.Id);
+                var detail = context.CartDetails.FirstOrDefault(d => d.CartHeader.Id == header.Id && d.ProductId == detailDto.ProductId);
                 if (detail == null)
                 {
                     detail = mapper.Map<CartDetail>(detailDto);

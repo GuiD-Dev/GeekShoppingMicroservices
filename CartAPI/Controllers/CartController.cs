@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using CartAPI.Repositories;
 using CartAPI.DTO;
 using CartAPI.RabbitMQ;
-using CartAPI.Models;
 
 namespace CartAPI.Controllers;
 
@@ -14,7 +13,9 @@ public class CartController(ICartRepository cartRepository) : ControllerBase
     public async Task<ActionResult<CartDTO>> FindById(string userId)
     {
         var cart = cartRepository.FindCartByUserId(userId);
-        return cart != null ? Ok(cart) : new CartDTO { Header = new CartHeaderDTO(), Details = new List<CartDetailDTO>() };
+        return cart != null
+            ? Ok(cart)
+            : new CartDTO { Header = new CartHeaderDTO(), Details = new List<CartDetailDTO>() };
     }
 
     [HttpPost]
