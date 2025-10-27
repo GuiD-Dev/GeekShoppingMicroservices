@@ -22,9 +22,7 @@ public class CartController(ICartService cartService, IProductService productSer
             {
                 var coupon = await couponService.GetCoupon(cart.Header.CouponCode);
                 if (coupon?.CouponCode != null)
-                {
                     cart.Header.DiscountAmount = coupon.DiscountAmount;
-                }
             }
 
             foreach (var detail in cart.Details)

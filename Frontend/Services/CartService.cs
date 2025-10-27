@@ -47,9 +47,9 @@ public class CartService(HttpClient client) : ICartService
 
     public async Task<bool> ApplyCoupon(CartViewModel cart)
     {
-        var response = await client.PostAsJson($"{BasePath}/apply-coupon", cart);
+        var response = await client.PutAsJson($"{BasePath}/apply-coupon", cart.Header);
         if (response.IsSuccessStatusCode)
-            return await response.ReadContentAs<bool>();
+            return true;
         else
             throw new Exception("Something went wrong when calling API");
     }
@@ -58,7 +58,7 @@ public class CartService(HttpClient client) : ICartService
     {
         var response = await client.DeleteAsync($"{BasePath}/remove-coupon/{userId}");
         if (response.IsSuccessStatusCode)
-            return await response.ReadContentAs<bool>();
+            return true;
         else
             throw new Exception("Something went wrong when calling API");
     }
