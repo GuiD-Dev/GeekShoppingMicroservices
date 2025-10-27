@@ -8,6 +8,6 @@ public interface ICartRepository
     CartDTO SaveOrUpdateCart(CartDTO dto);
     bool RemoveFromCart(long cartDetailId);
     bool ClearCart(string userId);
-    Task<bool> ApplyCoupon(string userId, string couponCode);
-    Task<bool> RemoveCoupon(string userId);
+    bool ApplyCoupon(string userId, string couponCode);
+    bool RemoveCoupon(string userId);
 }

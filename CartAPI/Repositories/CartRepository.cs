@@ -111,13 +111,27 @@ public class CartRepository(MySQLContext context, IMapper mapper) : ICartReposit
         }
     }
 
-    public Task<bool> ApplyCoupon(string userId, string couponCode)
+    public bool ApplyCoupon(string userId, string couponCode)
     {
-        throw new NotImplementedException();
+        var header = context.CartHeaders.FirstOrDefault(c => c.UserId == userId);
+
+        if (header == null) return false;
+
+        header.CouponCode = couponCode;
+        context.CartHeaders.Update(header);
+        context.SaveChanges();
+        return true;
     }
 
-    public Task<bool> RemoveCoupon(string userId)
+    public bool RemoveCoupon(string userId)
     {
-        throw new NotImplementedException();
+        var header = context.CartHeaders.FirstOrDefault(c => c.UserId == userId);
+
+        if (header == null) return false;
+
+        header.CouponCode = null;
+        context.CartHeaders.Update(header);
+        context.SaveChanges();
+        return true;
     }
 }

@@ -39,6 +39,18 @@ public class CartController(ICartRepository cartRepository) : ControllerBase
         return result ? Ok() : BadRequest();
     }
 
+    [HttpPut("apply-coupon")]
+    public async Task<ActionResult> ApplyCoupon(CartHeaderDTO headerDTO)
+    {
+        return cartRepository.ApplyCoupon(headerDTO.UserId, headerDTO.CouponCode) ? Ok() : NotFound();
+    }
+
+    [HttpDelete("remove-coupon/{userId}")]
+    public async Task<ActionResult> RemoveCoupon(string userId)
+    {
+        return cartRepository.RemoveCoupon(userId) ? Ok() : NotFound();
+    }
+
     [HttpPost("checkout")]
     public async Task<ActionResult<CheckoutDTO>> Checkout(CheckoutDTO checkout)
     {
