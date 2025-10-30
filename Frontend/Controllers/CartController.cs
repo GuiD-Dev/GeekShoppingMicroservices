@@ -9,6 +9,8 @@ public class CartController(ICartService cartService, IProductService productSer
 {
     public async Task<IActionResult> CartIndex() => View(await FindUserCart());
 
+    public async Task<IActionResult> Checkout() => View(await FindUserCart());
+
     private async Task<CartViewModel> FindUserCart()
     {
         // TODO: adjust when Identity Server will be implemented 
