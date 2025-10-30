@@ -76,7 +76,7 @@
                             {
                                 <span>Coupon:</span>
                                 <input asp-for="Header.CouponCode" />
-                                <button type="submit" asp-action="ApplyCoupon" class="btn-success">
+                                <button type="submit" asp-action="ApplyCoupon" class="btn btn-primary">
                                     Apply
                                 </button>
                             }
@@ -84,7 +84,7 @@
                             {
                                 <span>Coupon:</span>
                                 <input asp-for="Header.CouponCode" disabled />
-                                <button type="submit" asp-action="RemoveCoupon" class="btn-danger">
+                                <button type="submit" asp-action="RemoveCoupon" class="btn btn-danger">
                                     Remove
                                 </button>
                             }
@@ -108,9 +108,9 @@
                     <div class="col-6 col-md-3 offset-md-6">
                     </div>
                     <div class="col-6 col-md-3">
-                        <a asp-controller="Cart" asp-action="Checkout" class="btn btn-success form-control">
+                        <button type="submit" class="btn btn-success form-control" asp-controller="Cart" asp-action="Checkout">
                             <span>Checkout</span>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>

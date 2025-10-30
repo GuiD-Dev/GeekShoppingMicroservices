@@ -49,8 +49,6 @@ public class CartController(ICartService cartService, IProductService productSer
         return View();
     }
 
-    [HttpPost]
-    [ActionName("ApplyCoupon")]
     public async Task<IActionResult> ApplyCoupon(CartViewModel model)
     {
         // TODO: adjust when Identity Server will be implemented 
@@ -63,8 +61,6 @@ public class CartController(ICartService cartService, IProductService productSer
         return View();
     }
 
-    [HttpPost]
-    [ActionName("RemoveCoupon")]
     public async Task<IActionResult> RemoveCoupon()
     {
         // TODO: adjust when Identity Server will be implemented 
