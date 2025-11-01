@@ -2,5 +2,5 @@
 
 public interface ICheckoutPublisher
 {
-    void PublishMessage(CheckoutDTO baseMessage, string queueName);
+    void PublishMessage(CheckoutMessage baseMessage, string queueName);
 }

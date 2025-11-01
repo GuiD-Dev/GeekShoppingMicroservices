@@ -7,7 +7,7 @@ namespace CartAPI.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class CartController(ICartRepository cartRepository) : ControllerBase
+public class CartController(ICartRepository cartRepository, ICheckoutPublisher checkoutPublisher) : ControllerBase
 {
     [HttpGet("{userId}")]
     public async Task<ActionResult<CartDTO>> FindById(string userId)
@@ -52,15 +52,17 @@ public class CartController(ICartRepository cartRepository) : ControllerBase
     }
 
     [HttpPost("checkout")]
-    public async Task<ActionResult<CheckoutDTO>> Checkout(CheckoutDTO checkout)
+    public async Task<ActionResult<CheckoutMessage>> Checkout(CheckoutMessage checkout)
     {
         var cart = cartRepository.FindCartByUserId(checkout.UserId);
         if (cart == null) return NotFound();
 
-        // checkout.Details = cart.Details;
-        // checkout.DateTime = DateTime.Now;
+        checkout.Details = cart.Details;
+        checkout.DateTime = DateTime.Now;
 
-        // checkoutPublisher.PublishMessage(checkout, "checkout_queue");
+        checkoutPublisher.PublishMessage(checkout, "checkout_queue");
+
+        cartRepository.ClearCart(checkout.UserId);
 
         return Ok(checkout);
     }

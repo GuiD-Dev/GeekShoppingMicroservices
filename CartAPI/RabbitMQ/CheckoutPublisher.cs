@@ -19,7 +19,7 @@ public class CheckoutPublisher : ICheckoutPublisher
         .CreateConnectionAsync().Result;
     }
 
-    public async void PublishMessage(CheckoutDTO message, string queueName)
+    public async void PublishMessage(CheckoutMessage message, string queueName)
     {
         using var channel = await connection.CreateChannelAsync();
         await channel.QueueDeclareAsync(queue: queueName, false, false, false, arguments: null);
@@ -39,7 +39,7 @@ public class CheckoutPublisher : ICheckoutPublisher
         );
     }
 
-    private byte[] GetMessageAsByteArray(CheckoutDTO message)
+    private byte[] GetMessageAsByteArray(CheckoutMessage message)
     {
         var json = JsonSerializer.Serialize(
             message,

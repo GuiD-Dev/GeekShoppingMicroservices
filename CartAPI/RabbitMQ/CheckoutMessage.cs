@@ -2,7 +2,7 @@
 
 namespace CartAPI.RabbitMQ;
 
-public class CheckoutDTO
+public class CheckoutMessage
 {
     public long Id { get; set; }
     public DateTime MessageCreated { get; set; }
