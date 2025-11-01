@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using OrderAPI.DBContext;
 using OrderAPI.Repositories;
 
@@ -12,13 +13,25 @@ builder.Services.AddDbContext<MySQLContext>(options =>
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "OrderAPI", Version = "v1" });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderAPI v1"));
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderAPI v1");
+        c.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
