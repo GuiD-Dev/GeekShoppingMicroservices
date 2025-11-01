@@ -9,8 +9,6 @@ public class CartController(ICartService cartService, IProductService productSer
 {
     public async Task<IActionResult> CartIndex() => View(await FindUserCart());
 
-    public async Task<IActionResult> Checkout() => View(await FindUserCart());
-
     private async Task<CartViewModel> FindUserCart()
     {
         // TODO: adjust when Identity Server will be implemented 
@@ -43,8 +41,7 @@ public class CartController(ICartService cartService, IProductService productSer
     {
         var response = await cartService.RemoveFromCart(id);
 
-        if (response)
-            return RedirectToAction(nameof(CartIndex));
+        if (response) return RedirectToAction(nameof(CartIndex));
 
         return View();
     }
@@ -55,8 +52,8 @@ public class CartController(ICartService cartService, IProductService productSer
         var userId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value ?? "1";
 
         var response = await cartService.ApplyCoupon(model);
-        if (response)
-            return RedirectToAction(nameof(CartIndex));
+
+        if (response) return RedirectToAction(nameof(CartIndex));
 
         return View();
     }
@@ -67,11 +64,27 @@ public class CartController(ICartService cartService, IProductService productSer
         var userId = User.Claims.Where(u => u.Type == "sub")?.FirstOrDefault()?.Value ?? "1";
 
         var response = await cartService.RemoveCoupon(userId);
-        if (response)
-            return RedirectToAction(nameof(CartIndex));
+
+        if (response) return RedirectToAction(nameof(CartIndex));
 
         return View();
     }
+
+    public async Task<IActionResult> Checkout() => View(await FindUserCart());
+
+    [HttpPost]
+    public async Task<IActionResult> Checkout(CartViewModel cart)
+    {
+        if (!ModelState.IsValid) return View();
+
+        var response = await cartService.Checkout(cart.Header);
+
+        if (response != null) return RedirectToAction(nameof(Confirmation));
+
+        return View(cart);
+    }
+
+    public async Task<IActionResult> Confirmation() => View();
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

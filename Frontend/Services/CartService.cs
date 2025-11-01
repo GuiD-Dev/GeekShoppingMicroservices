@@ -63,9 +63,9 @@ public class CartService(HttpClient client) : ICartService
             throw new Exception("Something went wrong when calling API");
     }
 
-    public async Task<CartViewModel> Checkout(CartViewModel cart)
+    public async Task<CartViewModel> Checkout(CartHeaderViewModel header)
     {
-        var response = await client.PostAsJson($"{BasePath}/checkout", cart);
+        var response = await client.PostAsJson($"{BasePath}/checkout", header);
         if (response.IsSuccessStatusCode)
             return await response.ReadContentAs<CartViewModel>();
         else

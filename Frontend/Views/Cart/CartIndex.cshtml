@@ -2,7 +2,7 @@
 
 @if (Model != null && Model.Details.Any())
 {
-    <form method="post">
+    <form method="get">
         <br />
         <input asp-for="Header.UserId" hidden />
         <input asp-for="Header.Id" hidden />
@@ -108,7 +108,7 @@
                     <div class="col-6 col-md-3 offset-md-6">
                     </div>
                     <div class="col-6 col-md-3">
-                        <button type="submit" class="btn btn-success form-control" asp-controller="Cart" asp-action="Checkout">
+                        <button type="submit" class="btn btn-success form-control" asp-action="Checkout">
                             <span>Checkout</span>
                         </button>
                     </div>

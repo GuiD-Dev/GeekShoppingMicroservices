@@ -13,5 +13,5 @@ public interface ICartService
     Task<bool> ApplyCoupon(CartViewModel cart);
     Task<bool> RemoveCoupon(string userId);
 
-    Task<CartViewModel> Checkout(CartViewModel cart);
+    Task<CartViewModel> Checkout(CartHeaderViewModel header);
 }
