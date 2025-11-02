@@ -10,8 +10,6 @@ services:
     container_name: database
     environment:
       MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
       - network_database
 
@@ -68,6 +66,16 @@ services:
       - network_database
       - network_microservices
 
+  payment-api:
+    image: payment-api:latest
+    container_name: payment-api
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - network_database
+      - network_microservices
+
   api-gateway:
     image: api-gateway:latest
     ports:
@@ -75,6 +83,8 @@ services:
     container_name: api-gateway
     depends_on:
       - product-api
+      - cart-api
+      - coupon-api
     networks:
       - network_microservices
 
@@ -84,6 +94,6 @@ services:
       - "5000:5000"
     container_name: frontend
     depends_on:
-      - product-api
+      - api-gateway
     networks:
       - network_microservices
