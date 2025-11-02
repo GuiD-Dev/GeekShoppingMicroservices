@@ -37,16 +37,17 @@ public class CheckoutConsumer : BackgroundService
         consumer.ReceivedAsync += (chanel, evt) =>
         {
             var content = Encoding.UTF8.GetString(evt.Body.ToArray());
-            CheckoutDTO dto = JsonSerializer.Deserialize<CheckoutDTO>(content);
-            ProcessOrder(dto).GetAwaiter().GetResult();
-            _channel.BasicAckAsync(evt.DeliveryTag, false);
+            CheckoutHeaderDTO header = JsonSerializer.Deserialize<CheckoutHeaderDTO>(content);
+            ProcessOrder(header).GetAwaiter().GetResult();
+            _channel.BasicAckAsync(evt.DeliveryTag, false); // Remove the message from the queue
             return Task.CompletedTask;
         };
 
-        return _channel.BasicConsumeAsync("checkout_queue", false, consumer);;
+        _channel.BasicConsumeAsync("checkout_queue", false, consumer);
+        return Task.CompletedTask;
     }
 
-    private async Task ProcessOrder(CheckoutDTO dto)
+    private async Task ProcessOrder(CheckoutHeaderDTO dto)
     {
         Order order = new()
         {
@@ -72,8 +73,9 @@ public class CheckoutConsumer : BackgroundService
             OrderDetail detail = new()
             {
                 ProductId = details.ProductId,
-                ProductName = details.Product.Name,
-                Price = details.Product.Price,
+                // TODO: Refactor null references
+                ProductName = details.Product?.Name ?? string.Empty,
+                Price = details.Product?.Price ?? 0,
                 Count = details.Count,
             };
             order.CartTotalItens += details.Count;

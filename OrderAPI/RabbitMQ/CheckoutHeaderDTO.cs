@@ -1,6 +1,6 @@
 ﻿namespace OrderAPI.RabbitMQ;
 
-public class CheckoutDTO
+public class CheckoutHeaderDTO
 {
     public long Id { get; set; }
     public DateTime MessageCreated { get; set; }

@@ -29,7 +29,7 @@
             "name": "Debug OrderAPI",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/Order/OrderAPI.csproj"
+            "projectPath": "${workspaceFolder}/OrderAPI/OrderAPI.csproj"
         },
         {
             "name": "Debug PaymentAPI",
@@ -52,6 +52,7 @@
                 "Debug ProductAPI",
                 "Debug CartAPI",
                 "Debug CouponAPI",
+                "Debug OrderAPI",
                 "Debug Frontend",
             ],
             "stopAll": true

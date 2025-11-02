@@ -26,7 +26,7 @@ public class Order : BaseEntity
     [Column("purchase_date")]
     public DateTime DateTime { get; set; }
 
-    [Column("order_time")]
+    [Column("order_time")] // Date and time when the order was placed
     public DateTime OrderTime { get; set; }
 
     [Column("phone_number")]
