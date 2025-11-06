@@ -84,5 +84,26 @@ public class CheckoutConsumer : BackgroundService
         }
 
         await _repository.AddOrder(order);
+
+        PaymentDTO payment = new()
+        {
+            Name = order.FirstName + " " + order.LastName,
+            CardNumber = order.CardNumber,
+            CVV = order.CVV,
+            ExpiryMonthYear = order.ExpiryMonthYear,
+            OrderId = order.Id,
+            PurchaseAmount = order.PurchaseAmount,
+            Email = order.Email
+        };
+
+        try
+        {
+            _messagePublisher.PublishMessage(payment, "order_payment_process_queue");
+        }
+        catch (Exception)
+        {
+            //TODO: Log Exception
+            throw;
+        }
     }
 }
