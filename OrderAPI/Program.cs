@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using OrderAPI.DBContext;
 using OrderAPI.RabbitMQ;
 using OrderAPI.Repositories;
@@ -16,36 +15,12 @@ builder.Services.AddDbContext<MySQLContext>(options =>
 );
 
 builder.Services.AddSingleton(new OrderRepository(dbContextBuilder.Options));
-
 builder.Services.AddHostedService<CheckoutConsumer>();
 
-builder.Services.AddControllers();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "OrderAPI", Version = "v1" });
-});
+builder.Services.AddSingleton<IMessagePublisher, MessagePublisher>();
+builder.Services.AddHostedService<PaymentConsumer>();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderAPI v1");
-        c.RoutePrefix = string.Empty;
-    });
-}
-
-app.UseHttpsRedirection();
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
