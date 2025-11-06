@@ -1,4 +1,5 @@
 ﻿using OrderAPI.Models;
+using OrderAPI.RabbitMQ.Messages;
 using OrderAPI.Repositories;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,14 +11,15 @@ namespace OrderAPI.RabbitMQ;
 public class CheckoutConsumer : BackgroundService
 {
     private readonly OrderRepository _repository;
-    private IConnection _connection;
+    private readonly IMessagePublisher _messagePublisher;
     private IChannel _channel;
 
-    public CheckoutConsumer(OrderRepository repository)
+    public CheckoutConsumer(OrderRepository repository, IMessagePublisher messagePublisher)
     {
         _repository = repository;
+        _messagePublisher = messagePublisher;
 
-        _connection = new ConnectionFactory
+        var connection = new ConnectionFactory
         {
             HostName = "localhost",
             UserName = "guest",
@@ -25,50 +27,49 @@ public class CheckoutConsumer : BackgroundService
         }
         .CreateConnectionAsync().Result;
 
-        _channel = _connection.CreateChannelAsync().Result;
+        _channel = connection.CreateChannelAsync().Result;
         _channel.QueueDeclareAsync(queue: "checkout_queue", false, false, false, arguments: null);
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         stoppingToken.ThrowIfCancellationRequested();
-        var consumer = new AsyncEventingBasicConsumer(_channel);
 
-        consumer.ReceivedAsync += (chanel, evt) =>
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+        consumer.ReceivedAsync += async (chanel, evt) =>
         {
             var content = Encoding.UTF8.GetString(evt.Body.ToArray());
-            CheckoutHeaderDTO header = JsonSerializer.Deserialize<CheckoutHeaderDTO>(content);
+            var header = JsonSerializer.Deserialize<CartHeaderDTO>(content);
             ProcessOrder(header).GetAwaiter().GetResult();
-            _channel.BasicAckAsync(evt.DeliveryTag, false); // Remove the message from the queue
-            return Task.CompletedTask;
+            await _channel.BasicAckAsync(evt.DeliveryTag, false); // Remove the message from the queue
         };
 
         _channel.BasicConsumeAsync("checkout_queue", false, consumer);
         return Task.CompletedTask;
     }
 
-    private async Task ProcessOrder(CheckoutHeaderDTO dto)
+    private async Task ProcessOrder(CartHeaderDTO cart)
     {
         Order order = new()
         {
-            UserId = dto.UserId,
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
+            UserId = cart.UserId,
+            FirstName = cart.FirstName,
+            LastName = cart.LastName,
             OrderDetails = new List<OrderDetail>(),
-            CardNumber = dto.CardNumber,
-            CouponCode = dto.CouponCode,
-            CVV = dto.CVV,
-            DiscountAmount = dto.DiscountAmount,
-            Email = dto.Email,
-            ExpiryMonthYear = dto.ExpiryMothYear,
+            CardNumber = cart.CardNumber,
+            CouponCode = cart.CouponCode,
+            CVV = cart.CVV,
+            DiscountAmount = cart.DiscountAmount,
+            Email = cart.Email,
+            ExpiryMonthYear = cart.ExpiryMothYear,
             OrderTime = DateTime.Now,
-            PurchaseAmount = dto.PurchaseAmount,
+            PurchaseAmount = cart.PurchaseAmount,
             PaymentStatus = false,
-            Phone = dto.Phone,
-            DateTime = dto.DateTime
+            Phone = cart.Phone,
+            DateTime = cart.DateTime
         };
 
-        foreach (var details in dto.Details)
+        foreach (var details in cart.Details)
         {
             OrderDetail detail = new()
             {

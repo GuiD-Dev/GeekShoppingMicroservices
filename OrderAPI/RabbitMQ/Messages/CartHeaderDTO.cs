@@ -1,10 +1,9 @@
-﻿namespace OrderAPI.RabbitMQ;
+﻿using OrderAPI.RabbitMQ.Messages;
 
-public class CheckoutHeaderDTO
+namespace OrderAPI.RabbitMQ;
+
+public class CartHeaderDTO : BaseMessage
 {
-    public long Id { get; set; }
-    public DateTime MessageCreated { get; set; }
-
     public string UserId { get; set; }
     public string CouponCode { get; set; }
     public decimal PurchaseAmount { get; set; }
