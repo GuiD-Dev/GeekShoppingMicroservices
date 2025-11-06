@@ -6,11 +6,11 @@ namespace CartAPI.RabbitMQ;
 
 public class CheckoutPublisher : ICheckoutPublisher
 {
-    private readonly IConnection connection;
+    private readonly IConnection _connection;
 
     public CheckoutPublisher()
     {
-        connection = new ConnectionFactory
+        _connection = new ConnectionFactory
         {
             HostName = "localhost",
             UserName = "guest",
@@ -21,7 +21,7 @@ public class CheckoutPublisher : ICheckoutPublisher
 
     public async void PublishMessage(CheckoutMessage message, string queueName)
     {
-        using var channel = await connection.CreateChannelAsync();
+        using var channel = await _connection.CreateChannelAsync();
         await channel.QueueDeclareAsync(queue: queueName, false, false, false, arguments: null);
 
         var body = GetMessageAsByteArray(message);
