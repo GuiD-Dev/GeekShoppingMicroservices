@@ -3,9 +3,9 @@ using OrderAPI.Models;
 
 namespace OrderAPI.DBContext;
 
-public class MySQLContext : DbContext
+public class PgSQLContext : DbContext
 {
-    public MySQLContext(DbContextOptions<MySQLContext> options) : base(options) { }
+    public PgSQLContext(DbContextOptions<PgSQLContext> options) : base(options) { }
 
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDetail> OrderDetails { get; set; }

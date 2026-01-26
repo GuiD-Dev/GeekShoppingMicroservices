@@ -5,16 +5,15 @@ using OrderAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["MySQlConnection:MySQlConnectionString"];
-var dbContextBuilder = new DbContextOptionsBuilder<MySQLContext>();
-dbContextBuilder.UseMySql(
-    connectionString, new MySqlServerVersion(new Version(8, 4, 6))
-);
-builder.Services.AddDbContext<MySQLContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 4, 6)))
+var connectionString = builder.Configuration["ConnectionStrings:PgSQlConnectionString"];
+var optionsBuilder = new DbContextOptionsBuilder<PgSQLContext>();
+optionsBuilder.UseNpgsql(connectionString);
+
+builder.Services.AddDbContext<PgSQLContext>(options =>
+    options.UseNpgsql(builder.Configuration["ConnectionStrings:PgSQlConnectionString"])
 );
 
-builder.Services.AddSingleton(new OrderRepository(dbContextBuilder.Options));
+builder.Services.AddSingleton(new OrderRepository(optionsBuilder.Options));
 builder.Services.AddHostedService<CheckoutConsumer>();
 
 builder.Services.AddSingleton<IMessagePublisher, MessagePublisher>();
@@ -25,7 +24,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     Task.Delay(10000).Wait();
-    var db = scope.ServiceProvider.GetRequiredService<MySQLContext>();
+    var db = scope.ServiceProvider.GetRequiredService<PgSQLContext>();
     db.Database.Migrate();
 }
 

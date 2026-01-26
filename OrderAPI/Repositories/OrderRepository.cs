@@ -4,13 +4,13 @@ using OrderAPI.Models;
 
 namespace OrderAPI.Repositories;
 
-public class OrderRepository(DbContextOptions<MySQLContext> context) : IOrderRepository
+public class OrderRepository(DbContextOptions<PgSQLContext> context) : IOrderRepository
 {
     public async Task<bool> AddOrder(Order order)
     {
         if (order == null) return false;
 
-        await using var db = new MySQLContext(context);
+        await using var db = new PgSQLContext(context);
         db.Orders.Add(order);
         db.SaveChanges();
 
@@ -19,7 +19,7 @@ public class OrderRepository(DbContextOptions<MySQLContext> context) : IOrderRep
 
     public async Task UpdateOrderPaymentStatus(long orderId, bool status)
     {
-        await using var db = new MySQLContext(context);
+        await using var db = new PgSQLContext(context);
 
         var order = db.Orders.FirstOrDefault(o => o.Id == orderId);
         if (order != null)

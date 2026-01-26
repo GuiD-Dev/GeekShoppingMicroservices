@@ -2,17 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OrderAPI.DBContext;
 
 #nullable disable
 
 namespace OrderAPI.Migrations
 {
-    [DbContext(typeof(MySQLContext))]
-    [Migration("20250820211002_AddOrderTable")]
+    [DbContext(typeof(PgSQLContext))]
+    [Migration("20260126183527_AddOrderTable")]
     partial class AddOrderTable
     {
         /// <inheritdoc />
@@ -20,10 +20,10 @@ namespace OrderAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("OrderAPI.Models.Order", b =>
                 {
@@ -32,66 +32,66 @@ namespace OrderAPI.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CVV")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("cvv");
 
                     b.Property<string>("CardNumber")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("card_number");
 
                     b.Property<int>("CartTotalItens")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("total_itens");
 
                     b.Property<string>("CouponCode")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("coupon_code");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("purchase_date");
 
                     b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(65,30)")
+                        .HasColumnType("numeric")
                         .HasColumnName("discount_amount");
 
                     b.Property<string>("Email")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("email");
 
                     b.Property<string>("ExpiryMonthYear")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("expiry_month_year");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("first_name");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("last_name");
 
                     b.Property<DateTime>("OrderTime")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("order_time");
 
                     b.Property<bool>("PaymentStatus")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasColumnName("payment_status");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("phone_number");
 
                     b.Property<decimal>("PurchaseAmount")
-                        .HasColumnType("decimal(65,30)")
+                        .HasColumnType("numeric")
                         .HasColumnName("purchase_amount");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
@@ -106,17 +106,17 @@ namespace OrderAPI.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("Count")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("count");
 
                     b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(65,30)")
+                        .HasColumnType("numeric")
                         .HasColumnName("price");
 
                     b.Property<long>("ProductId")
@@ -124,7 +124,7 @@ namespace OrderAPI.Migrations
                         .HasColumnName("ProductId");
 
                     b.Property<string>("ProductName")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("product_name");
 
                     b.HasKey("Id");
