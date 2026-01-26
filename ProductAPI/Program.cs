@@ -8,10 +8,8 @@ using ProductAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["MySQlConnection:MySQlConnectionString"];
-
-builder.Services.AddDbContext<MySQLContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 4, 6)))
+builder.Services.AddDbContext<PgSQLContext>(options =>
+    options.UseNpgsql(builder.Configuration["ConnectionStrings:PgSQlConnectionString"])
 );
 
 IMapper mapper = new MapperConfiguration(cfg =>
@@ -53,7 +51,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     Task.Delay(10000).Wait();
-    var db = scope.ServiceProvider.GetRequiredService<MySQLContext>();
+    var db = scope.ServiceProvider.GetRequiredService<PgSQLContext>();
     db.Database.Migrate();
 }
 

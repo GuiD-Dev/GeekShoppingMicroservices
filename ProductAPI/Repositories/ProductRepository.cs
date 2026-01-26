@@ -5,7 +5,7 @@ using ProductAPI.Models;
 
 namespace ProductAPI.Repositories;
 
-public class ProductRepository(MySQLContext context, IMapper mapper) : IProductRepository
+public class ProductRepository(PgSQLContext context, IMapper mapper) : IProductRepository
 {
     public IEnumerable<ProductDTO> FindAll()
     {
