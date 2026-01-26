@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CouponAPI.Repositories;
 
-public class CouponRepository(MySQLContext context, IMapper mapper) : ICouponRepository
+public class CouponRepository(PgSQLContext context, IMapper mapper) : ICouponRepository
 {
     public async Task<CouponDTO> GetCouponByCode(string couponCode)
     {

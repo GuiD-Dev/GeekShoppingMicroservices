@@ -2,24 +2,24 @@
 using CouponAPI.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace CouponAPI.Migrations
 {
-    [DbContext(typeof(MySQLContext))]
-    partial class MySQLContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PgSQLContext))]
+    partial class PgSQLContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CouponAPI.Models.Coupon", b =>
                 {
@@ -28,16 +28,16 @@ namespace CouponAPI.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CouponCode")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("character varying(30)")
                         .HasColumnName("coupon_code");
 
                     b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(65,30)")
+                        .HasColumnType("numeric")
                         .HasColumnName("discount_amount");
 
                     b.HasKey("Id");
