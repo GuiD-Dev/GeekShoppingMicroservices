@@ -9,9 +9,9 @@ namespace GeekShopping.Email.Repository
 {
     public class EmailRepository : IEmailRepository
     {
-        private readonly DbContextOptions<MySQLContext> _context;
+        private readonly DbContextOptions<PgSQLContext> _context;
 
-        public EmailRepository(DbContextOptions<MySQLContext> context)
+        public EmailRepository(DbContextOptions<PgSQLContext> context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace GeekShopping.Email.Repository
                 SentDate = DateTime.Now,
                 Log = $"Order - {message.OrderId} has been created successfully!"
             };
-            await using var _db = new MySQLContext(_context);
+            await using var _db = new PgSQLContext(_context);
             _db.Emails.Add(email);
             await _db.SaveChangesAsync();
         }

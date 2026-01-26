@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GeekShopping.Email.Model.Context
 {
-    public class MySQLContext : DbContext
+    public class PgSQLContext : DbContext
     {
-        public MySQLContext(DbContextOptions<MySQLContext> options) : base(options) {}
+        public PgSQLContext(DbContextOptions<PgSQLContext> options) : base(options) {}
 
         public DbSet<EmailLog> Emails { get; set; }
     }
