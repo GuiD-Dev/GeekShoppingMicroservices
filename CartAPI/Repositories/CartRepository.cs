@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CartAPI.Repositories;
 
-public class CartRepository(MySQLContext context, IMapper mapper) : ICartRepository
+public class CartRepository(PgSQLContext context, IMapper mapper) : ICartRepository
 {
     public CartDTO FindCartByUserId(string userId)
     {

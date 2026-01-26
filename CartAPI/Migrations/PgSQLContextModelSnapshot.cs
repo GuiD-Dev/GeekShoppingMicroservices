@@ -2,27 +2,24 @@
 using CartAPI.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace CartAPI.Migrations
 {
-    [DbContext(typeof(MySQLContext))]
-    [Migration("20251026163632_AlterCartDetailProductVinculation")]
-    partial class AlterCartDetailProductVinculation
+    [DbContext(typeof(PgSQLContext))]
+    partial class PgSQLContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CartAPI.Models.CartDetail", b =>
                 {
@@ -31,10 +28,10 @@ namespace CartAPI.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("Count")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("count");
 
                     b.Property<long>("ProductId")
@@ -58,14 +55,14 @@ namespace CartAPI.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CouponCode")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("coupon_code");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext")
+                        .HasColumnType("text")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");

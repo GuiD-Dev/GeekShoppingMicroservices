@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CartAPI.DBContext;
 
-public class MySQLContext : DbContext
+public class PgSQLContext : DbContext
 {
-    public MySQLContext(DbContextOptions<MySQLContext> options) : base(options) { }
+    public PgSQLContext(DbContextOptions<PgSQLContext> options) : base(options) { }
 
     public DbSet<CartHeader> CartHeaders { get; set; }
     public DbSet<CartDetail> CartDetails { get; set; }
